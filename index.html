@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>序號兌換工作台</title>
+
+<style>
+body{
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+    background:#f5f6f8;
+    font-family:"Microsoft JhengHei",sans-serif;
+}
+
+h1{text-align:center}
+
+.toolbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+input{
+    flex:1;
+    padding:10px;
+}
+
+button{
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.reset{
+    background:#dc3545;
+    color:white;
+    padding:10px 15px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.progress{
+    height:20px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.bar{
+    height:100%;
+    background:#28a745;
+    width:0%;
+    transition:.3s;
+}
+
+.item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px;
+    border-bottom:1px solid #eee;
+    transition:.3s;
+}
+
+.item:last-child{
+    border:none;
+}
+
+.left{
+    flex:1;
+}
+
+.code{
+    color:#0d6efd;
+    font-weight:bold;
+}
+
+.copy{
+    background:#0d6efd;
+    color:white;
+    padding:8px 14px;
+}
+
+.done{
+    opacity:.45;
+}
+
+.done span{
+    text-decoration:line-through;
+}
+
+.fade{
+    animation:fadeOut 0.4s forwards;
+}
+
+@keyframes fadeOut{
+    from{
+        opacity:1;
+        background:#d4edda;
+    }
+
+    to{
+        opacity:0;
+        background:#d4edda;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎁 序號兌換工作台</h1>
+
+<div class="toolbar">
+    <input
+        id="search"
+        placeholder="搜尋..."
+        oninput="render()">
+
+    <button
+        class="reset"
+        onclick="resetAll()">
+        重設
+    </button>
+</div>
+
+<div class="card">
+
+已完成：
+<span id="count">0</span> /
+<span id="total">0</span>
+
+<div class="progress">
+<div id="bar" class="bar"></div>
+</div>
+
+</div>
+
+<div id="list" class="card"></div>
+
+<script>
+
+const creators=[
+
+["瓜肉","GUAROU"],
+["基德薯叔","UNKIDD"],
+["皮皮","17BABY"],
+["肯倫","KINLUN"],
+["Aruru","ARURU8"],
+["魚丸","YUWAN8"],
+["菇喜GoodC","GOODC8"],
+["小貓奈奈","NEKONA"],
+["小六","MABUS6"],
+["獅子丸","SHISHI"],
+["小亮","XLIANG"],
+["二犬","TWODOG"],
+["八毛","BAMAO8"],
+["光光實驗室","GUALAB"],
+["金金","JINJIN"],
+["鈴姆","LINGMU"],
+["RUI","RUIART"],
+["傑克雪諾","JKSNOW"],
+["火車卡祖笛","TKAZOO"],
+["咪咪蛋","MMDART"],
+["taxicute","TAXI88"],
+["可比_","KEBI88"],
+["路過大學生","PASSBY"],
+["初吻","ARKISS"],
+["馬克爸爸","MKBABA"],
+["薯餅姐姐","HBROWN"],
+["艾希Elsie","ELSMAP"],
+["小夜夜","YEYART"],
+["小君小君","XJUN24"],
+["阿偉","AWEI24"],
+["短腿娜娜","NANA24"],
+["ivanl艾文","IVAN24"]
+
+// 這裡直接把你的剩下資料貼進來
+
+];
+
+function markDone(code){
+
+    navigator.clipboard.writeText(code);
+
+    const row=
+    document.getElementById(
+        "row_"+code
+    );
+
+    const btn=
+    document.getElementById(
+        "btn_"+code
+    );
+
+    if(btn){
+
+        btn.innerText="✅ 已複製";
+        btn.disabled=true;
+
+    }
+
+    row.classList.add("fade");
+
+    setTimeout(()=>{
+
+        localStorage.setItem(
+            "redeem_"+code,
+            "1"
+        );
+
+        render();
+
+    },400);
+}
+
+function toggle(code){
+
+    const key="redeem_"+code;
+
+    if(localStorage.getItem(key)==="1"){
+        localStorage.removeItem(key);
+    }else{
+        localStorage.setItem(key,"1");
+    }
+
+    render();
+}
+
+function render(){
+
+    const keyword=
+    document
+    .getElementById("search")
+    .value
+    .toLowerCase();
+
+    const list=
+    document
+    .getElementById("list");
+
+    list.innerHTML="";
+
+    const sorted=
+    [...creators]
+    .sort((a,b)=>{
+
+        const aDone=
+        localStorage.getItem(
+            "redeem_"+a[1]
+        )==="1";
+
+        const bDone=
+        localStorage.getItem(
+            "redeem_"+b[1]
+        )==="1";
+
+        return aDone-bDone;
+    });
+
+    sorted.forEach(item=>{
+
+        const name=item[0];
+        const code=item[1];
+
+        if(
+            !name.toLowerCase().includes(keyword) &&
+            !code.toLowerCase().includes(keyword)
+        ){
+            return;
+        }
+
+        const done=
+        localStorage.getItem(
+            "redeem_"+code
+        )==="1";
+
+        const row=
+        document.createElement("div");
+
+        row.id="row_"+code;
+
+        row.className=
+        done
+        ? "item done"
+        : "item";
+
+        row.innerHTML=`
+
+        <div class="left">
+
+        <input
+            type="checkbox"
+            ${done?"checked":""}
+            onchange="toggle('${code}')">
+
+        <span>
+
+        ${name}
+
+        <span class="code">
+        (${code})
+        </span>
+
+        </span>
+
+        </div>
+
+        ${
+            done
+            ? ""
+            :
+            `
+            <button
+                id="btn_${code}"
+                class="copy"
+                onclick="markDone('${code}')">
+
+                📋 複製
+
+            </button>
+            `
+        }
+
+        `;
+
+        list.appendChild(row);
+    });
+
+    updateProgress();
+}
+
+function updateProgress(){
+
+    let count=0;
+
+    creators.forEach(x=>{
+
+        if(
+            localStorage.getItem(
+                "redeem_"+x[1]
+            )==="1"
+        ){
+            count++;
+        }
+
+    });
+
+    document
+    .getElementById("count")
+    .innerText=count;
+
+    document
+    .getElementById("total")
+    .innerText=creators.length;
+
+    document
+    .getElementById("bar")
+    .style.width=
+    (count/creators.length*100)+"%";
+}
+
+function resetAll(){
+
+    if(
+        !confirm("確定重設？")
+    ) return;
+
+    creators.forEach(x=>{
+
+        localStorage.removeItem(
+            "redeem_"+x[1]
+        );
+
+    });
+
+    render();
+}
+
+render();
+
+</script>
+
+</body>
+</html>
