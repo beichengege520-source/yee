@@ -15,124 +15,63 @@ body {
     color: #222;
 }
 h1 { text-align: center; margin: 10px 0 22px; }
-.tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
-    border-bottom: 1px solid #d9dee5;
-}
+.tabs { display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid #d9dee5; }
 .tab {
-    padding: 11px 20px;
-    border: 1px solid #d9dee5;
-    border-bottom: none;
-    border-radius: 10px 10px 0 0;
-    background: #e9edf2;
-    color: #4a5562;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
+    padding: 11px 20px; border: 1px solid #d9dee5; border-bottom: none;
+    border-radius: 10px 10px 0 0; background: #e9edf2; color: #4a5562;
+    font-size: 15px; font-weight: 600; cursor: pointer;
 }
-.tab.active {
-    background: #fff;
-    color: #1769aa;
-    border-color: #cbd5df;
-    box-shadow: 0 -2px 0 #2878c8 inset;
-}
-.topbar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-input[type="text"] {
-    flex: 1;
-    min-width: 180px;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-}
+.tab.active { background: #fff; color: #1769aa; border-color: #cbd5df; box-shadow: 0 -2px 0 #2878c8 inset; }
+.topbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+input[type="text"] { flex: 1; min-width: 180px; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; }
 button { font-family: inherit; }
-.reset {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #dc3545;
-    color: white;
-    font-size: 14px;
-}
+.reset { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; background: #dc3545; color: white; font-size: 14px; }
 .reset:hover { background: #bb2d3b; }
-.summary {
-    background: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.04);
-}
-.summary-line {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 18px;
-    align-items: baseline;
-}
+.summary { background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+.summary-line { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: baseline; }
 .stat { font-weight: 700; }
 .substat { color: #777; font-size: 13px; }
-.progress {
-    width: 100%;
-    height: 24px;
-    background: #ddd;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-top: 10px;
-}
-.progress-bar {
-    height: 100%;
-    background: #28a745;
-    width: 0%;
-    transition: width .3s;
-}
-.list {
-    background: #fff;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.04);
-}
-.item { padding: 10px; border-bottom: 1px solid #eee; }
+.progress { width: 100%; height: 24px; background: #ddd; border-radius: 20px; overflow: hidden; margin-top: 10px; }
+.progress-bar { height: 100%; background: #28a745; width: 0%; transition: width .3s; }
+.list, .copied-section { background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+.item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
 .item:last-child { border-bottom: none; }
-.item label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.item label { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; cursor: pointer; }
+.item label > span { overflow-wrap: anywhere; }
 .item input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; flex: 0 0 auto; }
 .item input[type="checkbox"]:disabled { cursor: not-allowed; }
 .done { text-decoration: line-through; color: #888; }
-.code { color: #0066cc; font-weight: bold; }
-.missing {
-    color: #d9534f;
-    font-size: 12px;
-    margin-left: 8px;
-    font-weight: bold;
-}
+.code { color: #0066cc; font-weight: bold; display: inline-block; transition: opacity 2s ease, transform 2s ease, filter 2s ease; }
+.code.fading-out { opacity: 0; transform: translateY(9px); filter: blur(2px); }
+.moved-placeholder { color: #888; font-size: 13px; font-weight: normal; }
+.copy-btn { flex: 0 0 auto; padding: 6px 12px; border: 1px solid #b8d3ea; border-radius: 7px; background: #eef6fc; color: #1769aa; font-size: 13px; cursor: pointer; transition: background .2s, border-color .2s; }
+.copy-btn:hover { background: #dceefa; border-color: #80b6df; }
+.copy-btn.copied { background: #e8f5e9; color: #218838; border-color: #a5d6a7; }
+.copy-btn:disabled { cursor: default; opacity: .85; }
+.missing { color: #d9534f; font-size: 12px; margin-left: 8px; font-weight: bold; }
 .empty { padding: 18px 10px; color: #888; text-align: center; }
-@media (max-width: 520px) {
-    body { padding: 12px; }
-    .tab { flex: 1; padding: 10px 8px; }
-    .item { padding: 12px 5px; }
-    .missing { display: inline-block; margin-left: 0; }
-}
+.copied-section { margin-top: 12px; }
+.copied-title { font-weight: 700; margin-bottom: 10px; color: #495563; }
+.copied-hint { color: #777; font-size: 12px; margin: -4px 0 8px; }
+.copied-entry { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 6px; border-bottom: 1px solid #eee; animation: copied-arrive .35s ease-out; }
+.copied-entry:last-child { border-bottom: none; }
+.copied-entry .code { font-size: 14px; }
+.copied-entry-main { min-width: 0; overflow-wrap: anywhere; }
+@keyframes copied-arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.copy-status { min-height: 18px; margin: 8px 2px 0; color: #218838; font-size: 13px; }
+@media (max-width: 520px) { body { padding: 12px; } .tab { flex: 1; padding: 10px 8px; } .item { padding: 12px 5px; gap: 6px; } .copy-btn { padding: 6px 9px; } .missing { display: inline-block; margin-left: 0; } }
 </style>
 </head>
 <body>
 <h1>🎁 專屬序號兌換追蹤表</h1>
-
 <div class="tabs" role="tablist" aria-label="序號波次">
     <button class="tab active" id="tab-wave1" role="tab" aria-selected="true" onclick="switchWave('wave1')">第一波序號</button>
     <button class="tab" id="tab-wave2" role="tab" aria-selected="false" onclick="switchWave('wave2')">第二波序號</button>
 </div>
-
 <div class="topbar">
     <input type="text" id="search" placeholder="搜尋名稱或代碼..." oninput="render()">
     <button class="reset" onclick="resetCurrentWave()">重設本波</button>
 </div>
-
 <div class="summary">
     <div class="summary-line">
         <span class="stat">已兌換：<span id="count">0</span> / <span id="total">32</span></span>
@@ -140,9 +79,9 @@ button { font-family: inherit; }
     </div>
     <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
 </div>
-
 <div id="list" class="list"></div>
-
+<div id="copiedList" class="copied-section" hidden></div>
+<div id="copyStatus" class="copy-status" role="status" aria-live="polite"></div>
 <script>
 const wave1Creators = [
 
@@ -182,74 +121,96 @@ const wave1Creators = [
 ];
 
 const wave2Creators = [
-    { name: '瓜肉', code: 'GUA77HKFQB', highlighted: true },
-    { name: '初吻', code: 'KISF2J65JF', highlighted: true },
-    { name: '菇喜', code: 'GDC4REBMBH', highlighted: false },
-    { name: '火車卡祖迪', code: 'KAZPV7CZJQ', highlighted: false },
-    { name: '基德薯叔', code: 'KIDG99GK3C', highlighted: true },
-    { name: '小君', code: 'JUN3NV8J6Q', highlighted: true },
-    { name: '光光實驗室', code: 'LAB9GWJW22', highlighted: true },
-    { name: '薯餅姐姐', code: 'HBRE8YNZY3', highlighted: false },
-    { name: '肯倫', code: 'KENVXHGAF9', highlighted: true },
-    { name: 'Aruru', code: 'ARUYY82VKQ', highlighted: false },
-    { name: '阿偉', code: 'WEIMHVV7RF', highlighted: true },
-    { name: '八毛', code: 'MAOS6RHYAZ', highlighted: true },
-    { name: '小六', code: 'LIU5E3RT4S', highlighted: true },
-    { name: '獅子丸', code: 'SHIEK8GWMD', highlighted: true },
-    { name: '咪咪蛋', code: '', highlighted: true },
-    { name: '小夜夜', code: '', highlighted: true },
-    { name: '小亮', code: '', highlighted: false },
-    { name: '兔森森', code: 'BUN6DSZ9ZA', highlighted: false },
-    { name: 'Rui嚕伊', code: 'RUI8NZDGKJ', highlighted: true },
-    { name: '里歐', code: 'LEON4JBFNR', highlighted: false },
-    { name: '艾希', code: '', highlighted: true },
-    { name: '皮皮', code: '', highlighted: true },
-    { name: '小貓奈奈', code: 'NEKUX232JY', highlighted: false },
-    { name: '金金', code: '', highlighted: false },
-    { name: '短腿娜娜', code: 'NANH2AQZ25', highlighted: false },
-    { name: '愛文', code: '', highlighted: false },
-    { name: '鈴姆', code: '', highlighted: false },
-    { name: 'lvanL艾文', code: 'IVNNS5YYP7', highlighted: false },
-    { name: '路過大學生', code: '', highlighted: false },
-    { name: '二犬', code: '', highlighted: false },
-    { name: '傑克雪諾', code: 'SNWPV5APFM', highlighted: false },
-    { name: 'taxicute', code: 'TAXV4UFN7Y', highlighted: false }
+    { name: "瓜肉", code: "GUA77HKFQB", highlighted: true },
+    { name: "初吻", code: "KISF2J65JF", highlighted: true },
+    { name: "菇喜", code: "GDC4REBMBH", highlighted: false },
+    { name: "火車卡祖迪", code: "KAZPV7CZJQ", highlighted: false },
+    { name: "基德薯叔", code: "KIDG99GK3C", highlighted: true },
+    { name: "小君", code: "JUN3NV8J6Q", highlighted: true },
+    { name: "光光實驗室", code: "LAB9GWJW22", highlighted: true },
+    { name: "薯餅姐姐", code: "HBRE8YNZY3", highlighted: false },
+    { name: "肯倫", code: "KENVXHGAF9", highlighted: true },
+    { name: "Aruru", code: "ARUYY82VKQ", highlighted: false },
+    { name: "阿偉", code: "WEIMHVV7RF", highlighted: true },
+    { name: "八毛", code: "MAOS6RHYAZ", highlighted: true },
+    { name: "小六", code: "LIU5E3RT4S", highlighted: true },
+    { name: "獅子丸", code: "SHIEK8GWMD", highlighted: true },
+    { name: "咪咪蛋", code: "", highlighted: true },
+    { name: "小夜夜", code: "", highlighted: true },
+    { name: "小亮", code: "", highlighted: false },
+    { name: "兔森森", code: "BUN6DSZ9ZA", highlighted: false },
+    { name: "Rui嚕伊", code: "RUI8NZDGKJ", highlighted: true },
+    { name: "里歐", code: "LEON4JBFNR", highlighted: false },
+    { name: "艾希", code: "", highlighted: true },
+    { name: "皮皮", code: "", highlighted: true },
+    { name: "小貓奈奈", code: "NEKUX232JY", highlighted: false },
+    { name: "金金", code: "", highlighted: false },
+    { name: "短腿娜娜", code: "NANH2AQZ25", highlighted: false },
+    { name: "愛文", code: "", highlighted: false },
+    { name: "鈴姆", code: "", highlighted: false },
+    { name: "lvanL艾文", code: "IVNNS5YYP7", highlighted: false },
+    { name: "路過大學生", code: "", highlighted: false },
+    { name: "二犬", code: "", highlighted: false },
+    { name: "傑克雪諾", code: "SNWPV5APFM", highlighted: false },
+    { name: "taxicute", code: "TAXV4UFN7Y", highlighted: false }
 ];
 
-const waveLabels = {
-    wave1: "第一波",
-    wave2: "第二波"
-};
-
+const waveLabels = { wave1: "第一波", wave2: "第二波" };
 let activeWave = "wave1";
-
-function getCreators() {
-    return activeWave === "wave1" ? wave1Creators : wave2Creators;
+const memoryStorage = new Map();
+function storageGet(key) {
+    try {
+        const value = window["localStorage"].getItem(key);
+        if (value !== null) return value;
+    } catch (error) {}
+    return memoryStorage.has(key) ? memoryStorage.get(key) : null;
+}
+function storageSet(key, value) {
+    memoryStorage.set(key, String(value));
+    try { window["localStorage"].setItem(key, String(value)); } catch (error) {}
+}
+function storageRemove(key) {
+    memoryStorage.delete(key);
+    try { window["localStorage"].removeItem(key); } catch (error) {}
 }
 
-function getCode(item) {
-    // 第一波沿用原始陣列格式：[名稱, 序號, 是否顯示提醒]
-    return activeWave === "wave1" ? item[1] : item.code;
+function getCreators(wave = activeWave) {
+    return wave === "wave1" ? wave1Creators : wave2Creators;
 }
-
-function getName(item) {
-    return activeWave === "wave1" ? item[0] : item.name;
+function getCode(item, wave = activeWave) {
+    return wave === "wave1" ? item[1] : item.code;
 }
-
-function hasOriginalWarning(item) {
-    return activeWave === "wave1" && item[2] === true;
+function getName(item, wave = activeWave) {
+    return wave === "wave1" ? item[0] : item.name;
 }
-
-function isHighlighted(item) {
-    return activeWave === "wave2" && item.highlighted === true;
+function hasOriginalWarning(item, wave = activeWave) {
+    return wave === "wave1" && item[2] === true;
 }
-
-function storageKey(item, index) {
-    const code = getCode(item);
-    // 第一波保留舊版 key，讓舊的勾選紀錄不會消失。
-    if (activeWave === "wave1") return "redeem_" + code;
-    // 第二波使用獨立 key，與第一波完全分開。
+function isHighlighted(item, wave = activeWave) {
+    return wave === "wave2" && item.highlighted === true;
+}
+function storageKey(item, index, wave = activeWave) {
+    const code = getCode(item, wave);
+    // 第一波沿用舊版 key，原有勾選紀錄會保留。
+    if (wave === "wave1") return "redeem_" + code;
     return "redeem_wave2_" + index;
+}
+function copiedStorageKey(wave = activeWave) {
+    return "copied_to_bottom_" + wave;
+}
+function getCopiedIndices(wave = activeWave) {
+    try {
+        const parsed = JSON.parse(storageGet(copiedStorageKey(wave)) || "[]");
+        if (!Array.isArray(parsed)) return [];
+        return [...new Set(parsed.filter(v => Number.isInteger(v) && v >= 0 && v < getCreators(wave).length))];
+    } catch (error) {
+        return [];
+    }
+}
+function markAsCopied(index, wave) {
+    const copied = getCopiedIndices(wave).filter(v => v !== index);
+    copied.push(index); // 再次複製時，將該序號排到已複製區最底部。
+    storageSet(copiedStorageKey(wave), JSON.stringify(copied));
 }
 
 function switchWave(wave) {
@@ -259,41 +220,164 @@ function switchWave(wave) {
     document.getElementById("tab-wave1").setAttribute("aria-selected", wave === "wave1" ? "true" : "false");
     document.getElementById("tab-wave2").setAttribute("aria-selected", wave === "wave2" ? "true" : "false");
     document.getElementById("search").value = "";
+    document.getElementById("copyStatus").textContent = "";
     render();
+}
+
+function legacyCopyText(text) {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    textarea.style.top = "0";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, textarea.value.length);
+    let success = false;
+    try { success = document.execCommand("copy"); } catch (error) { success = false; }
+    textarea.remove();
+    return success;
+}
+
+function showCopyFailure(code, button) {
+    button.textContent = "複製失敗";
+    button.classList.remove("copied");
+    document.getElementById("copyStatus").textContent = "瀏覽器未允許自動複製，序號仍保留在原位；可以手動複製：「" + code + "」。";
+    window.setTimeout(() => {
+        if (button.isConnected) button.textContent = "複製";
+    }, 2500);
+}
+
+function finishCopy(code, button, index, codeSpan, wave) {
+    button.textContent = "已複製 ✓";
+    button.classList.add("copied");
+    button.disabled = true;
+    codeSpan.classList.add("fading-out");
+    document.getElementById("copyStatus").textContent = "已複製 " + code + "；序號將在 2 秒後移到清單最下方。";
+
+    window.setTimeout(() => {
+        markAsCopied(index, wave);
+        if (activeWave === wave) render();
+    }, 2000);
+}
+
+function copyCode(code, button, index, codeSpan) {
+    if (!code || button.disabled) return;
+    const wave = activeWave;
+
+    // 在點擊事件當下直接呼叫剪貼簿 API；本機 HTML 則使用同步備援，避免失去使用者手勢權限。
+    if (window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(() => {
+            finishCopy(code, button, index, codeSpan, wave);
+        }).catch(() => {
+            if (legacyCopyText(code)) finishCopy(code, button, index, codeSpan, wave);
+            else showCopyFailure(code, button);
+        });
+    } else {
+        if (legacyCopyText(code)) finishCopy(code, button, index, codeSpan, wave);
+        else showCopyFailure(code, button);
+    }
+}
+
+function copyAgain(code, button) {
+    if (window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(() => showAgainSuccess(button)).catch(() => {
+            if (legacyCopyText(code)) showAgainSuccess(button);
+            else showCopyFailure(code, button);
+        });
+    } else {
+        if (legacyCopyText(code)) showAgainSuccess(button);
+        else showCopyFailure(code, button);
+    }
+}
+function showAgainSuccess(button) {
+    const oldText = button.textContent;
+    button.textContent = "已複製 ✓";
+    button.classList.add("copied");
+    button.disabled = true;
+    document.getElementById("copyStatus").textContent = "已再次複製序號。";
+    window.setTimeout(() => {
+        if (!button.isConnected) return;
+        button.textContent = oldText;
+        button.classList.remove("copied");
+        button.disabled = false;
+    }, 1200);
 }
 
 function toggle(index) {
     const item = getCreators()[index];
     if (!getCode(item)) return;
-
     const key = storageKey(item, index);
-    if (localStorage.getItem(key) === "1") {
-        localStorage.removeItem(key);
-    } else {
-        localStorage.setItem(key, "1");
-    }
+    if (storageGet(key) === "1") storageRemove(key);
+    else storageSet(key, "1");
     render();
+}
+
+function renderCopiedList(keyword) {
+    const panel = document.getElementById("copiedList");
+    const creators = getCreators();
+    const copied = getCopiedIndices().filter(index => {
+        const name = getName(creators[index]);
+        const code = getCode(creators[index]) || "";
+        return name.toLowerCase().includes(keyword) || code.toLowerCase().includes(keyword);
+    });
+    panel.innerHTML = "";
+    if (copied.length === 0) { panel.hidden = true; return; }
+
+    panel.hidden = false;
+    const heading = document.createElement("div");
+    heading.className = "copied-title";
+    heading.textContent = "已複製序號（依複製順序排列）";
+    panel.appendChild(heading);
+    const hint = document.createElement("div");
+    hint.className = "copied-hint";
+    hint.textContent = "原清單中的序號已淡出；序號本身集中移到這裡。";
+    panel.appendChild(hint);
+
+    copied.forEach(index => {
+        const item = creators[index];
+        const code = getCode(item);
+        const entry = document.createElement("div");
+        entry.className = "copied-entry";
+        const main = document.createElement("div");
+        main.className = "copied-entry-main";
+        main.appendChild(document.createTextNode(getName(item) + "　"));
+        const codeSpan = document.createElement("span");
+        codeSpan.className = "code";
+        codeSpan.textContent = code;
+        main.appendChild(codeSpan);
+        entry.appendChild(main);
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "copy-btn";
+        button.textContent = "再複製";
+        button.addEventListener("click", () => copyAgain(code, button));
+        entry.appendChild(button);
+        panel.appendChild(entry);
+    });
 }
 
 function render() {
     const list = document.getElementById("list");
     const keyword = document.getElementById("search").value.trim().toLowerCase();
     const creators = getCreators();
+    const copiedSet = new Set(getCopiedIndices());
     list.innerHTML = "";
-
     let shown = 0;
+
     creators.forEach((item, index) => {
         const name = getName(item);
         const code = getCode(item);
-        const searchableCode = code || "";
-
-        if (!name.toLowerCase().includes(keyword) && !searchableCode.toLowerCase().includes(keyword)) {
-            return;
-        }
+        const hasCode = Boolean(code);
+        if (!name.toLowerCase().includes(keyword) && !(code || "").toLowerCase().includes(keyword)) return;
         shown++;
 
-        const hasCode = Boolean(code);
-        const checked = hasCode && localStorage.getItem(storageKey(item, index)) === "1";
+        const checked = hasCode && storageGet(storageKey(item, index)) === "1";
+        const alreadyCopied = hasCode && copiedSet.has(index);
         const row = document.createElement("div");
         row.className = "item";
 
@@ -307,11 +391,19 @@ function render() {
         const nameSpan = document.createElement("span");
         if (checked) nameSpan.classList.add("done");
         if (isHighlighted(item)) nameSpan.style.fontWeight = "700";
-        nameSpan.appendChild(document.createTextNode((index + 1) + ". " + name + " "));
+        nameSpan.appendChild(document.createTextNode((index + 1) + ". " + name + "　"));
 
         const codeSpan = document.createElement("span");
-        codeSpan.className = "code";
-        codeSpan.textContent = hasCode ? "(" + code + ")" : "(尚未提供)";
+        if (!hasCode) {
+            codeSpan.className = "moved-placeholder";
+            codeSpan.textContent = "(尚未提供)";
+        } else if (alreadyCopied) {
+            codeSpan.className = "moved-placeholder";
+            codeSpan.textContent = "(序號已移至最下方 ↓)";
+        } else {
+            codeSpan.className = "code";
+            codeSpan.textContent = "(" + code + ")";
+        }
         nameSpan.appendChild(codeSpan);
 
         if (!hasCode) {
@@ -329,6 +421,16 @@ function render() {
         label.appendChild(checkbox);
         label.appendChild(nameSpan);
         row.appendChild(label);
+
+        if (hasCode && !alreadyCopied) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "copy-btn";
+            button.textContent = "複製";
+            button.setAttribute("aria-label", "複製「" + name + "」的序號");
+            button.addEventListener("click", () => copyCode(code, button, index, codeSpan));
+            row.appendChild(button);
+        }
         list.appendChild(row);
     });
 
@@ -339,43 +441,32 @@ function render() {
         list.appendChild(empty);
     }
 
+    renderCopiedList(keyword);
     updateProgress();
 }
 
 function updateProgress() {
     const creators = getCreators();
-    let completed = 0;
-    let redeemable = 0;
-    let pending = 0;
-
+    let completed = 0, redeemable = 0, pending = 0;
     creators.forEach((item, index) => {
-        if (!getCode(item)) {
-            pending++;
-            return;
-        }
+        if (!getCode(item)) { pending++; return; }
         redeemable++;
-        if (localStorage.getItem(storageKey(item, index)) === "1") completed++;
+        if (storageGet(storageKey(item, index)) === "1") completed++;
     });
-
-    document.getElementById("count").innerText = completed;
-    document.getElementById("total").innerText = redeemable;
-    document.getElementById("pendingCount").innerText = pending > 0
-        ? "尚未公布序號：" + pending + " 位（不列入進度）"
-        : "";
-
-    const percent = redeemable === 0 ? 0 : (completed / redeemable) * 100;
-    document.getElementById("progressBar").style.width = percent + "%";
+    document.getElementById("count").textContent = completed;
+    document.getElementById("total").textContent = redeemable;
+    document.getElementById("pendingCount").textContent = pending > 0
+        ? "尚未公布序號：" + pending + " 位（不列入進度）" : "";
+    document.getElementById("progressBar").style.width = (redeemable ? completed / redeemable * 100 : 0) + "%";
 }
 
 function resetCurrentWave() {
-    if (!confirm("確定要清除「" + waveLabels[activeWave] + "」的所有勾選紀錄？另一波的紀錄不會受到影響。")) {
-        return;
-    }
-
+    if (!confirm("確定要清除「" + waveLabels[activeWave] + "」的所有勾選紀錄？另一波的紀錄不會受到影響。")) return;
     const creators = getCreators();
-    creators.forEach((item, index) => {
-        localStorage.removeItem(storageKey(item, index));
-    });
+    creators.forEach((item, index) => storageRemove(storageKey(item, index)));
+    // 重設本波也一併清掉該波的已複製排列紀錄。
+    storageRemove(copiedStorageKey());
+    document.getElementById("copyStatus").textContent = "";
     render();
 }
 
