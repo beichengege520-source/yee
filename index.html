@@ -2,396 +2,384 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>序號兌換工作台</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>專屬序號兌換追蹤表</title>
 <style>
-body{
-    max-width:1000px;
-    margin:auto;
-    padding:20px;
-    background:#f5f6f8;
-    font-family:"Microsoft JhengHei",sans-serif;
+* { box-sizing: border-box; }
+body {
+    font-family: "Microsoft JhengHei", sans-serif;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+    background: #f4f6f8;
+    color: #222;
 }
-
-h1{text-align:center}
-
-.toolbar{
-    display:flex;
-    gap:10px;
-    margin-bottom:15px;
+h1 { text-align: center; margin: 10px 0 22px; }
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #d9dee5;
 }
-
-input{
-    flex:1;
-    padding:10px;
+.tab {
+    padding: 11px 20px;
+    border: 1px solid #d9dee5;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    background: #e9edf2;
+    color: #4a5562;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
 }
-
-button{
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
+.tab.active {
+    background: #fff;
+    color: #1769aa;
+    border-color: #cbd5df;
+    box-shadow: 0 -2px 0 #2878c8 inset;
 }
-
-.reset{
-    background:#dc3545;
-    color:white;
-    padding:10px 15px;
+.topbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
 }
-
-.card{
-    background:white;
-    border-radius:10px;
-    padding:15px;
-    margin-bottom:15px;
+input[type="text"] {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
 }
-
-.progress{
-    height:20px;
-    background:#ddd;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:10px;
+button { font-family: inherit; }
+.reset {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #dc3545;
+    color: white;
+    font-size: 14px;
 }
-
-.bar{
-    height:100%;
-    background:#28a745;
-    width:0%;
-    transition:.3s;
+.reset:hover { background: #bb2d3b; }
+.summary {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
 }
-
-.item{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    padding:10px;
-    border-bottom:1px solid #eee;
-    transition:.3s;
+.summary-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    align-items: baseline;
 }
-
-.item:last-child{
-    border:none;
+.stat { font-weight: 700; }
+.substat { color: #777; font-size: 13px; }
+.progress {
+    width: 100%;
+    height: 24px;
+    background: #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 10px;
 }
-
-.left{
-    flex:1;
+.progress-bar {
+    height: 100%;
+    background: #28a745;
+    width: 0%;
+    transition: width .3s;
 }
-
-.code{
-    color:#0d6efd;
-    font-weight:bold;
+.list {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
 }
-
-.copy{
-    background:#0d6efd;
-    color:white;
-    padding:8px 14px;
+.item { padding: 10px; border-bottom: 1px solid #eee; }
+.item:last-child { border-bottom: none; }
+.item label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.item input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; flex: 0 0 auto; }
+.item input[type="checkbox"]:disabled { cursor: not-allowed; }
+.done { text-decoration: line-through; color: #888; }
+.code { color: #0066cc; font-weight: bold; }
+.missing {
+    color: #d9534f;
+    font-size: 12px;
+    margin-left: 8px;
+    font-weight: bold;
 }
-
-.done{
-    opacity:.45;
-}
-
-.done span{
-    text-decoration:line-through;
-}
-
-.fade{
-    animation:fadeOut 0.4s forwards;
-}
-
-@keyframes fadeOut{
-    from{
-        opacity:1;
-        background:#d4edda;
-    }
-
-    to{
-        opacity:0;
-        background:#d4edda;
-    }
+.empty { padding: 18px 10px; color: #888; text-align: center; }
+@media (max-width: 520px) {
+    body { padding: 12px; }
+    .tab { flex: 1; padding: 10px 8px; }
+    .item { padding: 12px 5px; }
+    .missing { display: inline-block; margin-left: 0; }
 }
 </style>
 </head>
-
 <body>
+<h1>🎁 專屬序號兌換追蹤表</h1>
 
-<h1>🎁 序號兌換工作台</h1>
-
-<div class="toolbar">
-    <input
-        id="search"
-        placeholder="搜尋..."
-        oninput="render()">
-
-    <button
-        class="reset"
-        onclick="resetAll()">
-        重設
-    </button>
+<div class="tabs" role="tablist" aria-label="序號波次">
+    <button class="tab active" id="tab-wave1" role="tab" aria-selected="true" onclick="switchWave('wave1')">第一波序號</button>
+    <button class="tab" id="tab-wave2" role="tab" aria-selected="false" onclick="switchWave('wave2')">第二波序號</button>
 </div>
 
-<div class="card">
-
-已完成：
-<span id="count">0</span> /
-<span id="total">0</span>
-
-<div class="progress">
-<div id="bar" class="bar"></div>
+<div class="topbar">
+    <input type="text" id="search" placeholder="搜尋名稱或代碼..." oninput="render()">
+    <button class="reset" onclick="resetCurrentWave()">重設本波</button>
 </div>
 
+<div class="summary">
+    <div class="summary-line">
+        <span class="stat">已兌換：<span id="count">0</span> / <span id="total">32</span></span>
+        <span class="substat" id="pendingCount"></span>
+    </div>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
 </div>
 
-<div id="list" class="card"></div>
+<div id="list" class="list"></div>
 
 <script>
+const wave1Creators = [
 
-const creators=[
-
-["瓜肉","GUAROU"],
-["基德薯叔","UNKIDD"],
-["皮皮","17BABY"],
-["肯倫","KINLUN"],
-["Aruru","ARURU8"],
-["魚丸","YUWAN8"],
-["菇喜GoodC","GOODC8"],
-["小貓奈奈","NEKONA"],
-["小六","MABUS6"],
-["獅子丸","SHISHI"],
-["小亮","XLIANG"],
-["二犬","TWODOG"],
-["八毛","BAMAO8"],
-["光光實驗室","GUALAB"],
-["金金","JINJIN"],
-["鈴姆","LINGMU"],
-["RUI","RUIART"],
-["傑克雪諾","JKSNOW"],
-["火車卡祖笛","TKAZOO"],
-["咪咪蛋","MMDART"],
-["taxicute","TAXI88"],
-["可比_","KEBI88"],
-["路過大學生","PASSBY"],
-["初吻","ARKISS"],
-["馬克爸爸","MKBABA"],
-["薯餅姐姐","HBROWN"],
-["艾希Elsie","ELSMAP"],
-["小夜夜","YEYART"],
-["小君小君","XJUN24"],
-["阿偉","AWEI24"],
-["短腿娜娜","NANA24"],
-["ivanl艾文","IVAN24"],
-["里歐","Leocyg"],
-["兔森森","BUNSEN"],
-["愛文","PLYWEN"]
-
-// 這裡直接把你的剩下資料貼進來
+["瓜肉","GUAROU",false],
+["基德薯叔","UNKIDD",false],
+["皮皮","17BABY",false],
+["肯倫","KINLUN",false],
+["Aruru","ARURU8",false],
+["魚丸","YUWAN8",false],
+["菇喜GoodC","GOODC8",false],
+["小貓奈奈","NEKONA",false],
+["小六","MABUS6",false],
+["獅子丸","SHISHI",false],
+["小亮","XLIANG",false],
+["二犬","TWODOG",false],
+["八毛","BAMAO8",false],
+["光光實驗室","GUALAB",false],
+["金金","JINJIN",false],
+["鈴姆","LINGMU",false],
+["RUI","RUIART",false],
+["傑克雪諾","JKSNOW",false],
+["火車卡祖笛","TKAZOO",false],
+["咪咪蛋","MMDART",false],
+["taxicute","TAXI88",false],
+["可比_","KEBI88",false],
+["路過大學生","PASSBY",false],
+["初吻","ARKISS",true],
+["馬克爸爸","MKBABA",false],
+["薯餅姐姐","HBROWN",false],
+["艾希Elsie","ELSMAP",false],
+["小夜夜","YEYART",true],
+["小君小君","XJUN24",true],
+["阿偉","AWEI24",true],
+["短腿娜娜","NANA24",true],
+["ivanl艾文","IVAN24",true]
 
 ];
 
-function markDone(code){
+const wave2Creators = [
+    { name: '瓜肉', code: 'GUA77HKFQB', highlighted: true },
+    { name: '初吻', code: 'KISF2J65JF', highlighted: true },
+    { name: '菇喜', code: 'GDC4REBMBH', highlighted: false },
+    { name: '火車卡祖迪', code: 'KAZPV7CZJQ', highlighted: false },
+    { name: '基德薯叔', code: 'KIDG99GK3C', highlighted: true },
+    { name: '小君', code: 'JUN3NV8J6Q', highlighted: true },
+    { name: '光光實驗室', code: 'LAB9GWJW22', highlighted: true },
+    { name: '薯餅姐姐', code: 'HBRE8YNZY3', highlighted: false },
+    { name: '肯倫', code: 'KENVXHGAF9', highlighted: true },
+    { name: 'Aruru', code: 'ARUYY82VKQ', highlighted: false },
+    { name: '阿偉', code: 'WEIMHVV7RF', highlighted: true },
+    { name: '八毛', code: 'MAOS6RHYAZ', highlighted: true },
+    { name: '小六', code: 'LIU5E3RT4S', highlighted: true },
+    { name: '獅子丸', code: 'SHIEK8GWMD', highlighted: true },
+    { name: '咪咪蛋', code: '', highlighted: true },
+    { name: '小夜夜', code: '', highlighted: true },
+    { name: '小亮', code: '', highlighted: false },
+    { name: '兔森森', code: 'BUN6DSZ9ZA', highlighted: false },
+    { name: 'Rui嚕伊', code: 'RUI8NZDGKJ', highlighted: true },
+    { name: '里歐', code: 'LEON4JBFNR', highlighted: false },
+    { name: '艾希', code: '', highlighted: true },
+    { name: '皮皮', code: '', highlighted: true },
+    { name: '小貓奈奈', code: 'NEKUX232JY', highlighted: false },
+    { name: '金金', code: '', highlighted: false },
+    { name: '短腿娜娜', code: 'NANH2AQZ25', highlighted: false },
+    { name: '愛文', code: '', highlighted: false },
+    { name: '鈴姆', code: '', highlighted: false },
+    { name: 'lvanL艾文', code: 'IVNNS5YYP7', highlighted: false },
+    { name: '路過大學生', code: '', highlighted: false },
+    { name: '二犬', code: '', highlighted: false },
+    { name: '傑克雪諾', code: 'SNWPV5APFM', highlighted: false },
+    { name: 'taxicute', code: 'TAXV4UFN7Y', highlighted: false }
+];
 
-    navigator.clipboard.writeText(code);
+const waveLabels = {
+    wave1: "第一波",
+    wave2: "第二波"
+};
 
-    const row=
-    document.getElementById(
-        "row_"+code
-    );
+let activeWave = "wave1";
 
-    const btn=
-    document.getElementById(
-        "btn_"+code
-    );
-
-    if(btn){
-
-        btn.innerText="✅ 已複製";
-        btn.disabled=true;
-
-    }
-
-    row.classList.add("fade");
-
-    setTimeout(()=>{
-
-        localStorage.setItem(
-            "redeem_"+code,
-            "1"
-        );
-
-        render();
-
-    },400);
+function getCreators() {
+    return activeWave === "wave1" ? wave1Creators : wave2Creators;
 }
 
-function toggle(code){
+function getCode(item) {
+    // 第一波沿用原始陣列格式：[名稱, 序號, 是否顯示提醒]
+    return activeWave === "wave1" ? item[1] : item.code;
+}
 
-    const key="redeem_"+code;
+function getName(item) {
+    return activeWave === "wave1" ? item[0] : item.name;
+}
 
-    if(localStorage.getItem(key)==="1"){
-        localStorage.removeItem(key);
-    }else{
-        localStorage.setItem(key,"1");
-    }
+function hasOriginalWarning(item) {
+    return activeWave === "wave1" && item[2] === true;
+}
 
+function isHighlighted(item) {
+    return activeWave === "wave2" && item.highlighted === true;
+}
+
+function storageKey(item, index) {
+    const code = getCode(item);
+    // 第一波保留舊版 key，讓舊的勾選紀錄不會消失。
+    if (activeWave === "wave1") return "redeem_" + code;
+    // 第二波使用獨立 key，與第一波完全分開。
+    return "redeem_wave2_" + index;
+}
+
+function switchWave(wave) {
+    activeWave = wave;
+    document.getElementById("tab-wave1").classList.toggle("active", wave === "wave1");
+    document.getElementById("tab-wave2").classList.toggle("active", wave === "wave2");
+    document.getElementById("tab-wave1").setAttribute("aria-selected", wave === "wave1" ? "true" : "false");
+    document.getElementById("tab-wave2").setAttribute("aria-selected", wave === "wave2" ? "true" : "false");
+    document.getElementById("search").value = "";
     render();
 }
 
-function render(){
+function toggle(index) {
+    const item = getCreators()[index];
+    if (!getCode(item)) return;
 
-    const keyword=
-    document
-    .getElementById("search")
-    .value
-    .toLowerCase();
+    const key = storageKey(item, index);
+    if (localStorage.getItem(key) === "1") {
+        localStorage.removeItem(key);
+    } else {
+        localStorage.setItem(key, "1");
+    }
+    render();
+}
 
-    const list=
-    document
-    .getElementById("list");
+function render() {
+    const list = document.getElementById("list");
+    const keyword = document.getElementById("search").value.trim().toLowerCase();
+    const creators = getCreators();
+    list.innerHTML = "";
 
-    list.innerHTML="";
+    let shown = 0;
+    creators.forEach((item, index) => {
+        const name = getName(item);
+        const code = getCode(item);
+        const searchableCode = code || "";
 
-    const sorted=
-    [...creators]
-    .sort((a,b)=>{
-
-        const aDone=
-        localStorage.getItem(
-            "redeem_"+a[1]
-        )==="1";
-
-        const bDone=
-        localStorage.getItem(
-            "redeem_"+b[1]
-        )==="1";
-
-        return aDone-bDone;
-    });
-
-    sorted.forEach(item=>{
-
-        const name=item[0];
-        const code=item[1];
-
-        if(
-            !name.toLowerCase().includes(keyword) &&
-            !code.toLowerCase().includes(keyword)
-        ){
+        if (!name.toLowerCase().includes(keyword) && !searchableCode.toLowerCase().includes(keyword)) {
             return;
         }
+        shown++;
 
-        const done=
-        localStorage.getItem(
-            "redeem_"+code
-        )==="1";
+        const hasCode = Boolean(code);
+        const checked = hasCode && localStorage.getItem(storageKey(item, index)) === "1";
+        const row = document.createElement("div");
+        row.className = "item";
 
-        const row=
-        document.createElement("div");
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = checked;
+        checkbox.disabled = !hasCode;
+        checkbox.addEventListener("change", () => toggle(index));
 
-        row.id="row_"+code;
+        const nameSpan = document.createElement("span");
+        if (checked) nameSpan.classList.add("done");
+        if (isHighlighted(item)) nameSpan.style.fontWeight = "700";
+        nameSpan.appendChild(document.createTextNode((index + 1) + ". " + name + " "));
 
-        row.className=
-        done
-        ? "item done"
-        : "item";
+        const codeSpan = document.createElement("span");
+        codeSpan.className = "code";
+        codeSpan.textContent = hasCode ? "(" + code + ")" : "(尚未提供)";
+        nameSpan.appendChild(codeSpan);
 
-        row.innerHTML=`
-
-        <div class="left">
-
-        <input
-            type="checkbox"
-            ${done?"checked":""}
-            onchange="toggle('${code}')">
-
-        <span>
-
-        ${name}
-
-        <span class="code">
-        (${code})
-        </span>
-
-        </span>
-
-        </div>
-
-        ${
-            done
-            ? ""
-            :
-            `
-            <button
-                id="btn_${code}"
-                class="copy"
-                onclick="markDone('${code}')">
-
-                📋 複製
-
-            </button>
-            `
+        if (!hasCode) {
+            const warning = document.createElement("span");
+            warning.className = "missing";
+            warning.textContent = "⚠ 尚未公布序號";
+            nameSpan.appendChild(warning);
+        } else if (hasOriginalWarning(item)) {
+            const warning = document.createElement("span");
+            warning.className = "missing";
+            warning.textContent = "⚠ 尚未出現在序號名單";
+            nameSpan.appendChild(warning);
         }
 
-        `;
-
+        label.appendChild(checkbox);
+        label.appendChild(nameSpan);
+        row.appendChild(label);
         list.appendChild(row);
     });
+
+    if (shown === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "找不到符合的名稱或序號。";
+        list.appendChild(empty);
+    }
 
     updateProgress();
 }
 
-function updateProgress(){
+function updateProgress() {
+    const creators = getCreators();
+    let completed = 0;
+    let redeemable = 0;
+    let pending = 0;
 
-    let count=0;
-
-    creators.forEach(x=>{
-
-        if(
-            localStorage.getItem(
-                "redeem_"+x[1]
-            )==="1"
-        ){
-            count++;
+    creators.forEach((item, index) => {
+        if (!getCode(item)) {
+            pending++;
+            return;
         }
-
+        redeemable++;
+        if (localStorage.getItem(storageKey(item, index)) === "1") completed++;
     });
 
-    document
-    .getElementById("count")
-    .innerText=count;
+    document.getElementById("count").innerText = completed;
+    document.getElementById("total").innerText = redeemable;
+    document.getElementById("pendingCount").innerText = pending > 0
+        ? "尚未公布序號：" + pending + " 位（不列入進度）"
+        : "";
 
-    document
-    .getElementById("total")
-    .innerText=creators.length;
-
-    document
-    .getElementById("bar")
-    .style.width=
-    (count/creators.length*100)+"%";
+    const percent = redeemable === 0 ? 0 : (completed / redeemable) * 100;
+    document.getElementById("progressBar").style.width = percent + "%";
 }
 
-function resetAll(){
+function resetCurrentWave() {
+    if (!confirm("確定要清除「" + waveLabels[activeWave] + "」的所有勾選紀錄？另一波的紀錄不會受到影響。")) {
+        return;
+    }
 
-    if(
-        !confirm("確定重設？")
-    ) return;
-
-    creators.forEach(x=>{
-
-        localStorage.removeItem(
-            "redeem_"+x[1]
-        );
-
+    const creators = getCreators();
+    creators.forEach((item, index) => {
+        localStorage.removeItem(storageKey(item, index));
     });
-
     render();
 }
 
 render();
-
 </script>
-
 </body>
 </html>
